@@ -1,8 +1,10 @@
 <template>
   <div class="weekly">
-    <el-button type="primary" @click="addWeekly()">创建</el-button>
+  	<div class="button-box">
+  		<el-button type="primary" @click="addWeekly">创建</el-button>
+  	</div>
 	
-	<div class="weekly-info">
+	<div v-cloak class="weekly-info">
 		<p v-if="!weeklyList.length"><strong>还没有任何计划</strong></p>
 		<el-table
 		    :data="weeklyList"
@@ -47,11 +49,11 @@
 		      <template slot-scope="scope">
 		      	<div v-html="scope.row.nextWeekWork"></div>
 		      </template>
-		    </el-table-column> -->
+		    </el-table-column>
 		    <el-table-column
 		      prop="collaboration"
 		      label="需协调与帮助" align="center">
-		    </el-table-column>
+		    </el-table-column> -->
 		    <el-table-column label="操作" align="center">
 		      <template slot-scope="scope">
 		        <el-button
@@ -83,7 +85,12 @@ export default {
   methods: {
   	fetchData() {
   		var that = this;
-	    that.$axios.get('/admin/Weekly/getWeekly')
+  		var params = {};
+	    that.$axios.post('/admin/Weekly/getWeekly',params,{
+	        headers: {
+	          'Content-Type': 'application/json'
+	        }
+      	})
 	    .then(function(res){
 		  var data = res.data;
 	      that.weeklyList = data.data;
@@ -110,7 +117,6 @@ export default {
 	        }
       	})
       	.then(function(res){
-        	console.log(res);
         	var data = res.data;
         	var status = data.status;
         	if(status){
@@ -120,6 +126,11 @@ export default {
       	.catch(function(error){
         	console.log(error)
       	});
+	},
+	handleEdit(id){
+		return this.$router.push(
+	    	{path:'edit-weekly',query:{ id:id }}
+	    );
 	},
 	toWeeklyDatil(id){
 	    return this.$router.push(
@@ -133,4 +144,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .weekly-datil{color: #409EFF;cursor: pointer;}
+.button-box .el-button{margin-bottom: 20px;}
 </style>

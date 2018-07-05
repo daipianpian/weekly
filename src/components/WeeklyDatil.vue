@@ -1,16 +1,37 @@
 <template>
-  <div>
+  <div v-cloak class="weekly-datil">
   	<el-row>
-  	  <el-col :span="6"><div class="grid-content">序号(ID)</div></el-col>
-  	  <el-col :span="18"><div class="grid-content">{{weeklyDatil.id}}</div></el-col>
+  	  <el-col :span="4"><div class="grid-content grid-content-left">序号(ID)</div></el-col>
+  	  <el-col :span="20"><div class="grid-content grid-content-right">{{weeklyDatil.id}}</div></el-col>
   	</el-row>
     <el-row>
-      <el-col :span="6"><div class="grid-content">创建者</div></el-col>
-      <el-col :span="18"><div class="grid-content">{{weeklyDatil.adminName}}</div></el-col>
+      <el-col :span="4"><div class="grid-content grid-content-left">创建者</div></el-col>
+      <el-col :span="20"><div class="grid-content grid-content-right">{{weeklyDatil.adminName}}</div></el-col>
     </el-row>
     <el-row>
-      <el-col :span="6"><div class="grid-content">开始日期</div></el-col>
-      <el-col :span="18"><div class="grid-content">{{weeklyDatil.startTime}}</div></el-col>
+      <el-col :span="4"><div class="grid-content grid-content-left">起始日期</div></el-col>
+      <el-col :span="20"><div class="grid-content grid-content-right">{{weeklyDatil.startTime}} ~ {{weeklyDatil.endTime}}</div></el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="4"><div class="grid-content grid-content-left">第几周</div></el-col>
+      <el-col :span="20"><div class="grid-content grid-content-right">{{weeklyDatil.weekOfYear}}</div></el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="4"><div class="grid-content grid-content-left">这周完成工作</div></el-col>
+      <el-col :span="20"><div class="grid-content grid-content-right" v-html="weeklyDatil.thisWeekWork"></div></el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="4"><div class="grid-content grid-content-left">下周工作计划</div></el-col>
+      <el-col :span="20"><div class="grid-content grid-content-right" v-html="weeklyDatil.nextWeekWork"></div></el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="4"><div class="grid-content grid-content-left">需协调与帮助</div></el-col>
+      <el-col :span="20"><div class="grid-content grid-content-right">{{weeklyDatil.collaboration}}</div></el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="24" align="center">
+        <el-button type="primary" @click="goBack">返回</el-button>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -25,7 +46,12 @@ export default {
     }
   },
   created() {
-    this.fetchData();
+    if(this.id>0){
+      this.fetchData();
+    }else{
+      /*return this.$router.push('/home/weekly');*/
+    }
+    
   },
   methods: {
     fetchData() {
@@ -49,6 +75,9 @@ export default {
         .catch(function(error){
           console.log(error)
         });
+    },
+    goBack() {
+      return this.$router.go(-1);
     }
   }
 }
@@ -56,5 +85,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .weekly-datil {width:1120px;margin:0 auto;}
+  .weekly-datil .el-row{padding:25px 0;/* line-height: 1; */color: #909399;font-size: 14px; border-bottom: solid 1px #e6e6e6;}
+  .weekly-datil .el-row:last-child{border:none;}
 
+  .grid-content-left{padding:0 20px; color: #909399;text-align: right;}
+  .grid-content-right{padding:0 20px;color: #606266;}
 </style>

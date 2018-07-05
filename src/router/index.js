@@ -5,6 +5,7 @@ import Home from '@/components/Home'
 import Admin from '@/components/Admin'
 import Weekly from '@/components/Weekly'
 import WeeklyDatil from '@/components/WeeklyDatil'
+import EditWeekly from '@/components/EditWeekly'
 import AddWeekly from '@/components/AddWeekly'
 import NotFound from '@/components/404'
 
@@ -41,6 +42,11 @@ export default new Router({
 					path: 'weekly-datil',
 					name: 'WeeklyDatil',
 					component: WeeklyDatil
+				},
+				{
+					path: 'edit-weekly',
+					name: 'EditWeekly',
+					component: EditWeekly
 				},
 				{
 					path: 'add-weekly',

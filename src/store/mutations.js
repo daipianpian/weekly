@@ -17,5 +17,8 @@ export default {
 	},
 	[types.DELETE_PLAN] (state, idx) {
 		state.list.splice(idx, 1);
+	},
+	[types.CHANGE_IS_BILL] (state, bill) {
+		state.isBill = bill;
 	}
 };

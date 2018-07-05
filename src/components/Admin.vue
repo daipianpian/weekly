@@ -1,11 +1,12 @@
 <template>
   <div>
   	<div class="">用户信息123</div>
-  	<el-switch
+    <div>用户信息页isBill = {{isBill}}</div>
+    <!-- <el-switch
       v-model="value2"
       active-color="#13ce66"
       inactive-color="#ff4949">
-    </el-switch>
+    </el-switch> -->
   </div>
 </template>
 
@@ -16,6 +17,15 @@ export default {
     return {
       value2: true
     }
+  },
+  computed: {
+      isBill: {
+        get: function () {
+          return this.$store.state.isBill
+        },
+        set: function () {
+        }
+      }
   },
   components: {
     

@@ -12,5 +12,8 @@ export default {
 	},
 	deletePlan({commit}, plan) {
 		commit(types.DELETE_PLAN, plan)
+	},
+	changeIsBill({commit}, bill) {
+		commit(types.CHANGE_IS_BILL, bill)
 	}
 };

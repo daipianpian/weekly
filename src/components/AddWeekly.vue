@@ -1,5 +1,5 @@
 <template>
-  <div style="width:1200px;margin:0 auto;">
+  <div v-cloak style="width:1200px;margin:0 auto;">
   	<el-form ref="form" :model="form" label-width="120px">
 
       <el-form-item label="周报时间">
@@ -81,8 +81,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log('周报起始时间='+this.form.weekTime);
-      console.log('submit!');
       var that = this;
 
       that.form.weekOfYear = that.getWeekNumber(that.form.weekOfYear);
@@ -100,7 +98,6 @@ export default {
         }
       })
       .then(function(res){
-        console.log(res);
         var data = res.data;
         var status = data.status;
         if(status){
@@ -123,11 +120,17 @@ export default {
       var weekYear = date.getFullYear();
       var weekNum = 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 
-      return weekYear+'第'+weekNum+'周';
+      return weekYear+' 第 '+weekNum+' 周';
 
     },
     onCancel(){
-
+      this.form = {
+        weekTime: [],
+        weekOfYear: '',
+        thisWeekWork: '',
+        nextWeekWork: '',
+        collaboration: ''
+      }
     }
   }
 }
@@ -135,29 +138,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.quill-editor {
-  height: 200px; 
-}
-.quill-editor .ql-container {
-    height: 70%;
-}
-.limit {
-  height: 30px;
-  border: 1px solid #ccc;
-  line-height: 30px;
-  text-align: right;
+.quill-editor { height: 200px; }
+.quill-editor .ql-container { height: 70%; }
+.limit { height: 30px; border: 1px solid #ccc; line-height: 30px; text-align: right; }
+.limit span { color: #ee2a7b; }
 
-  
-}
-.limit span {
-    color: #ee2a7b;
-  }
+.ql-snow .ql-editor img { max-width: 480px; }
 
-.ql-snow .ql-editor img {
-  max-width: 480px;
-}
-
-.ql-editor .ql-video {
-  max-width: 480px;
-}
+.ql-editor .ql-video { max-width: 480px; }
 </style>

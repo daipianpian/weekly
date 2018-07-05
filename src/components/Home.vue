@@ -5,9 +5,17 @@
       <el-row>
         <el-col :span="18">
           <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="">
-            <el-menu-item index="1"><i class="el-icon-date"></i>工作周报</el-menu-item>
+            <el-menu-item index="1"><i class="el-icon-date"></i>工作周报 <!-- isBill={{isBill}} --></el-menu-item>
           </el-menu> 
         </el-col>
+        <!-- <el-col :span="4">
+          <el-switch
+            v-model="isBill"
+            active-color="#13ce66"
+            inactive-color="#ff4949" 
+            @change="changeIsBill">
+          </el-switch>
+        </el-col> -->
         <el-col :span="6">
           <el-menu default-active="0" class="el-menu-demo" mode="horizontal" @select="">
              <el-menu-item index="1">
@@ -41,7 +49,7 @@
     name: 'app',
     data() {
       return {
-        
+        isBill: this.$store.state.isBill
       }
     },
     components: {
@@ -84,6 +92,16 @@
             console.log(error);
             return false;
         });
+      },
+      changeIsBill(){
+        console.log('this.isBill='+this.isBill);
+        /*this.isBill = (this.isBill ? 0 : 1);*/
+        if(this.isBill){
+          this.$store.dispatch('changeIsBill',1);
+        }else{
+          this.$store.dispatch('changeIsBill',0);
+        }
+        // this.$store.dispatch('changeIsBill',this.isBill);
       }
     }
   }

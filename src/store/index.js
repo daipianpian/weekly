@@ -7,7 +7,8 @@ Vue.use(Vuex);
 
 const state = {
 	totalTime: 0,
-	list: []
+	list: [],
+	isBill: 0  // 显示含税商品还是不含税商品，0-不含税，1-含税
 }
 
 export default new Vuex.Store({
