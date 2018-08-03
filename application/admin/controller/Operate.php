@@ -18,7 +18,7 @@ class Operate
 	        $postParams = $request->post();
             $weekTime = $postParams['weekTime'];
 
-            $adminId = 1;
+            $adminId = $postParams['adminId'];
             $startTime = $weekTime[0];
             $endTime = $weekTime[1];
             $weekOfYear = $postParams['weekOfYear'];

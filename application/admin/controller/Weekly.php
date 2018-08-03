@@ -12,13 +12,21 @@ class Weekly
         $request = Request::instance();
         // 是否为 POST 请求
         if ($request->isPost()){
-        	$data = db('weekly')->where('state',1)->order('id desc')->select();
-            $dataCount = count($data);
+            $postParams = $request->post();
+            $weekly= db('weekly');
+            $condition['adminId'] = $postParams['adminId'];
+            $condition['state'] = '1';
+            $count= $weekly->where($condition)->count();
+            $pageNum = $postParams['pageNum'];
+            $pageSize = $postParams['pageSize'];
+            $data['count'] = $count;
+        	$data['list'] = $weekly->where('state',1)->order('id desc')->page($pageNum,$pageSize)->select();
+            $dataCount = count($data['list']);
             for($i=0; $i < $dataCount; $i++){
-                $admin['id'] = $data[$i]['adminId'];
+                $admin['id'] = $data['list'][$i]['adminId'];
                 $admin['state'] = '1';
-                $data[$i]['adminName'] = db('admin')->where($admin)->value('name');
-                $data[$i]['weeklyDatil'] = '点击即可查看详情';
+                $data['list'][$i]['adminName'] = db('admin')->where($admin)->value('name');
+                $data['list'][$i]['weeklyDatil'] = '点击即可查看详情';
             }
         	$callback['code'] = 10000;
         	$callback['data'] =  $data;
@@ -33,7 +41,10 @@ class Weekly
         if ($request->isPost()){
             $postParams = $request->post();
 
-            $id = $postParams['id'];
+            $condition['id'] = $postParams['id'];
+            $condition['adminId'] = $postParams['adminId'];
+            $condition['state'] = '1';
+
             $thisWeekWork = $postParams['thisWeekWork'];
             $nextWeekWork = $postParams['nextWeekWork'];
             $collaboration = $postParams['collaboration'];
@@ -46,7 +57,7 @@ class Weekly
                 'update_time' => $curtime
             ];     
 
-            $result = db('weekly')->where('id', $id)->update($data);
+            $result = db('weekly')->where($condition)->update($data);
 
             if($result){
                 $callback['status'] = '1';
@@ -67,13 +78,16 @@ class Weekly
         if ($request->isPost()){
             
             $postParams = $request->post();
-            $id = $postParams['id'];
+
+            $condition['id'] = $postParams['id'];
+            $condition['adminId'] = $postParams['adminId'];
+            $condition['state'] = '1';
 
             $data = [
                 'state' => '0'
             ];
 
-            $result = db('weekly')->where('id',$id)->data($data)->update();
+            $result = db('weekly')->where($condition)->data($data)->update();
 
             if($result){
                 $callback['status'] = '1';
@@ -97,6 +111,7 @@ class Weekly
             $id = $postParams['id'];
 
             $condition['id'] = $id;
+            $condition['adminId'] = $postParams['adminId'];
             $condition['state'] = '1';
 
             $result = db('weekly')->where($condition)->find();

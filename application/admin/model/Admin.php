@@ -18,7 +18,11 @@ class Admin extends \think\Model
 	        if ($user) {
 	            unset($user["password"]);
 	            session("ext_user", $user);
-	            return true;
+
+                $check['adminId'] = $user["id"];
+                $check['adminName'] = $user["name"];
+                $check['flag'] = true;
+	            return $check;
 	        }else{
 	            return false;
 	        }
