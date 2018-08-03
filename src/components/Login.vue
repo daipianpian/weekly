@@ -67,12 +67,17 @@ export default {
                         var data = res.data;
                         console.log(data);
                         if(data.status=='1'){
+
+                            sessionStorage.setItem("adminId", data.adminId);
+                            sessionStorage.setItem("adminName", data.adminName);
+                            sessionStorage.setItem("loginTime", data.loginTime);
+                            
                             that.$message({
                               message: '登陆成功',
                               type: 'success',
                               duration: 1000
                             });
-                            return that.$router.replace('/home/admin');
+                            return that.$router.push('/home/admin');
                         } 
                     })
                     .catch(function(error){

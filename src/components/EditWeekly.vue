@@ -41,10 +41,21 @@
 
       <el-form-item align="center">
         <el-button type="primary" @click="onSubmit">更新数据</el-button>
-        <el-button @click="goBack">取消</el-button>
+        <el-button @click="goWeekly">取消</el-button>
       </el-form-item>
 
     </el-form>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <span>无相关周报信息，请返回周报列表！</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleClose">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -55,6 +66,7 @@ export default {
   data () {
     return {
       id: this.$route.query.id,
+      dialogVisible: false,
       form: {},
       editorOption:{
           modules:{
@@ -75,7 +87,7 @@ export default {
     if(this.id>0){
       this.fetchData();
     }else{
-      /*return this.$router.push('/home/weekly');*/
+      this.dialogVisible = !this.dialogVisible;
     }
   },
   methods: {
@@ -83,7 +95,8 @@ export default {
       var that = this;
 
       var params = {
-        id: that.id
+        id: that.id,
+        adminId: sessionStorage.getItem('adminId')
       };
       that.$axios.post('/admin/Weekly/getWeeklyDatil',params,{
           headers: {
@@ -106,6 +119,7 @@ export default {
       var that = this;
       var params = {
         id: that.form.id,
+        adminId: sessionStorage.getItem('adminId'),
         thisWeekWork: that.form.thisWeekWork,
         nextWeekWork: that.form.nextWeekWork,
         collaboration: that.form.collaboration
@@ -120,15 +134,23 @@ export default {
         var data = res.data;
         var status = data.status;
         if(status){
-          that.$router.replace('weekly');
+          console.log('更新成功');
+          return that.$router.push(
+            {path:'weekly-datil',query:{ id:that.form.id }}
+          );
         }
       })
       .catch(function(error){
         console.log(error)
       });
     },
-    goBack(){
-      return this.$router.go(-1);
+    handleClose() {
+      this.dialogVisible = !this.dialogVisible;
+      return this.$router.push('/home/weekly');
+    },
+    goWeekly(){
+      var that = this;
+      that.$router.replace('weekly');
     }
   }
 }

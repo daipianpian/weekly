@@ -6,9 +6,10 @@ import actions from './actions'
 Vue.use(Vuex);
 
 const state = {
-	totalTime: 0,
-	list: [],
-	isBill: 0  // 显示含税商品还是不含税商品，0-不含税，1-含税
+	isBill: 0,  // 显示含税商品还是不含税商品，0-不含税，1-含税
+	adminId: sessionStorage.getItem('adminId'),
+	adminName: sessionStorage.getItem('adminName'),
+	loginTime: sessionStorage.getItem('loginTime')
 }
 
 export default new Vuex.Store({

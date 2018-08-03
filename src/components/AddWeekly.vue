@@ -86,6 +86,7 @@ export default {
       that.form.weekOfYear = that.getWeekNumber(that.form.weekOfYear);
 
       var params = {
+        adminId: sessionStorage.getItem('adminId'),
         weekTime: that.form.weekTime,
         weekOfYear: that.form.weekOfYear,
         thisWeekWork: that.form.thisWeekWork,

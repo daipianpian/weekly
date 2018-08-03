@@ -37,23 +37,6 @@
 		      	<div class="weekly-datil" v-html="scope.row.weeklyDatil" @click="toWeeklyDatil(scope.row.id)"></div>
 		      </template>
 		    </el-table-column>
-		    <!-- <el-table-column
-		      prop="thisWeekWork"
-		      label="这周完成工作" align="center">
-		      <template slot-scope="scope">
-		      	<div v-html="scope.row.thisWeekWork"></div>
-		      </template>
-		    </el-table-column>
-		    <el-table-column
-		      label="下周工作计划" align="center">
-		      <template slot-scope="scope">
-		      	<div v-html="scope.row.nextWeekWork"></div>
-		      </template>
-		    </el-table-column>
-		    <el-table-column
-		      prop="collaboration"
-		      label="需协调与帮助" align="center">
-		    </el-table-column> -->
 		    <el-table-column label="操作" align="center">
 		      <template slot-scope="scope">
 		        <el-button
@@ -66,9 +49,21 @@
 		      </template>
 		    </el-table-column>
 		</el-table>
-
+		
 
 	</div>
+	<div class="pagination-box">
+		<el-pagination
+		  background
+		  @current-change="handleCurrentChange"
+	      :current-page.sync="pageNum"
+	      :page-size="pageSize"
+	      layout="total, prev, pager, next"
+	      :total="total">
+		</el-pagination>
+	</div>
+	
+
   </div>
 </template>
 
@@ -76,16 +71,23 @@
 export default {
   data () {
     return {
+    	pageNum: 1,
+    	pageSize: 3,
+    	total: 0,
     	weeklyList: []
     }
   },
-  created() {
-  	this.fetchData();
+  mounted() {
+  	this.fetchData(this.pageNum);
   },
   methods: {
-  	fetchData() {
+  	fetchData(pageNum) {
   		var that = this;
-  		var params = {};
+  		var params = {
+  			adminId: sessionStorage.getItem('adminId'),
+  			pageNum: pageNum,
+  			pageSize: that.pageSize
+  		};
 	    that.$axios.post('/admin/Weekly/getWeekly',params,{
 	        headers: {
 	          'Content-Type': 'application/json'
@@ -93,11 +95,15 @@ export default {
       	})
 	    .then(function(res){
 		  var data = res.data;
-	      that.weeklyList = data.data;
+		  that.total = data.data.count;
+	      that.weeklyList = data.data.list;
 		})
 		.catch(function(error){
 		  console.log(error)
 		});
+  	},
+  	handleCurrentChange(val) {
+    	this.fetchData(val);
   	},
 	addWeekly() {
     	return this.$router.replace('add-weekly');
@@ -109,7 +115,8 @@ export default {
 	    console.log(id);
 	    var that = this;
 	    var params = {
-	    	id: id
+	    	id: id,
+	    	adminId: sessionStorage.getItem('adminId')
 	    };
 	    that.$axios.post('/admin/Weekly/deleteWeekly',params,{
 	        headers: {
@@ -120,7 +127,7 @@ export default {
         	var data = res.data;
         	var status = data.status;
         	if(status){
-        		that.fetchData();
+        		that.fetchData(that.pageNum);
         	}
       	})
       	.catch(function(error){
@@ -145,4 +152,5 @@ export default {
 <style scoped>
 .weekly-datil{color: #409EFF;cursor: pointer;}
 .button-box .el-button{margin-bottom: 20px;}
+.pagination-box{margin: 50px auto 0;width: auto;text-align: center;}
 </style>
